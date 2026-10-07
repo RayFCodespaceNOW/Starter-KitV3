@@ -1,256 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--Swap our for actual link-->
-    <link rel="canonical" href="https://www.company.com/projects">
-
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-
-    <!--Social Media Display-->
-    <meta property="og:title" content=""/>
-    <meta property="og:description" content=""/>
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content=""/>
-    <meta property="og:image" content="/images/social.jpg"/>
-    <meta property="og:image:secure_url" content="/images/social.jpg"/>
-
-    <!--Favicons-->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v1">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="theme-color" content="#ffffff">
-
-    <!-- Preload -->
-    <link rel="preload" as="image" href="/images/cabinets2-m.jpg">
-    <link rel="preload" as="font" type="font/woff2" href="fonts/roboto-v29-latin-regular.woff2" crossorigin>
-    <link rel="preload" as="font" type="font/woff2" href="fonts/roboto-v29-latin-700.woff2" crossorigin>
-
-    <link rel="stylesheet" href="/css/root.css">
-    <link rel="stylesheet" href="/css/projects.css">
-    <link rel="stylesheet" href="/css/dark.css">
-
-    <!--Put analytics tag here at the bottom to prevent it from render blocking-->
-
-    <title>Company Name | Projects | Town and State</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f2e2dc">
+    <meta name="description" content="An overview of the launch vehicle, transit spacecraft, Mars entry system, and habitat in the fictional AURORA mission concept.">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="/css/mission.css?v=13">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}
+  </script>
+  <title>Spacecraft and systems | AURORA</title>
 </head>
 <body>
-    <!--Screen reader skip main nav-->
-    <a class="skip" aria-label="skip to main content" href="#main">Click To Skip To Main Content</a>
-
-    <!-- ============================================ -->
-    <!--                 Navigation                   -->
-    <!-- ============================================ -->
-
-    <div id="navigation">
-        <div aria-hidden="true" class="background-color-div">
-            <!--This div is used to overcome a z-index issue where the open
-                #navbar-menu is on top of the #navigation. This bar places itself 
-                the #navbar-menu so that menu appears behind the #navigation
-            -->
+  <a class="skip" href="#main">Skip to content</a>
+  <header id="navigation"><div class="container">
+    <a class="logo" href="/index.html" aria-label="AURORA home"><span class="logo-mark" aria-hidden="true">A</span><span><span class="logo-name">AURORA</span><span class="logo-caption">Mars mission concept</span></span></a>
+    <nav id="navbar-menu" aria-label="Main navigation"><ul>
+      <li><a href="/index.html">Overview</a></li><li><a href="/about.html">Mission</a></li><li><a class="active" aria-current="page" href="/projects.html">Spacecraft</a></li><li><a href="/reviews.html">Crew</a></li><li><a href="/contact.html">Research</a></li><li><a href="/reference.html">Reference</a></li>
+    </ul></nav>
+    <button class="hamburger-menu" type="button" aria-label="Open navigation" aria-controls="navbar-menu" aria-expanded="false"><span aria-hidden="true"></span></button>
+  </div></header>
+  <main id="main">
+    <section class="spacecraft-explorer" data-spacecraft-explorer aria-labelledby="spacecraft-explorer-heading">
+      <div class="spacecraft-explorer__layout">
+        <figure class="spacecraft-explorer__viewer" data-spacecraft-viewer>
+          <canvas data-spacecraft-canvas aria-label="Interactive 3D spacecraft model"></canvas>
+          <div class="spacecraft-explorer__hotspots" aria-label="Spacecraft hotspots">
+            <button class="spacecraft-hotspot" type="button" data-model-hotspot="solar" data-step-target="2" aria-label="Zoom to solar array"><span class="spacecraft-hotspot__dot"></span><span class="spacecraft-hotspot__label">Solar array</span></button>
+            <button class="spacecraft-hotspot" type="button" data-model-hotspot="human" data-step-target="1" aria-label="Zoom to crew figure"><span class="spacecraft-hotspot__dot"></span><span class="spacecraft-hotspot__label">Crew scale</span></button>
+            <button class="spacecraft-hotspot" type="button" data-model-hotspot="capsule" data-step-target="3" aria-label="Zoom to capsule"><span class="spacecraft-hotspot__dot"></span><span class="spacecraft-hotspot__label">Crew capsule</span></button>
+          </div>
+          <div class="spacecraft-explorer__readout" aria-live="polite">
+            <p class="eyebrow">AURORA / MARS TRANSIT</p>
+            <span data-viewer-index>01 / 04</span>
+            <h1 id="spacecraft-explorer-heading" data-viewer-title>Vehicle overview</h1>
+            <p data-viewer-description>Overall scale and layout.</p>
+          </div>
+          <p class="spacecraft-explorer__status" data-viewer-status>Loading spacecraft model</p>
+          <aside class="spacecraft-interior" data-capsule-interior hidden aria-label="Capsule interior reference">
+            <button class="spacecraft-interior__close" type="button" data-close-capsule aria-label="Close capsule interior">×</button>
+            <img src="/images/capsule-interior.jpg" alt="Interior of a NASA Crew Dragon spacecraft showing four crew seats and cargo positions" width="731" height="575">
+            <div><strong>Capsule interior reference</strong><p>NASA Crew Dragon cabin · reference only, not an AURORA design.</p><a href="https://images.nasa.gov/details/KSC-20240927-PH-SPX01_0001" target="_blank" rel="noopener noreferrer">NASA image record</a></div>
+          </aside>
+          <figcaption>Model credit: <a href="https://sketchfab.com/MitchLewis" target="_blank" rel="noopener noreferrer">Mitch Lewis on Sketchfab</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC Attribution 4.0</a></figcaption>
+        </figure>
+        <div class="spacecraft-explorer__steps" data-spacecraft-steps>
+          <article class="spacecraft-explorer__step is-active" data-spacecraft-step data-focus="overview" data-title="Vehicle overview" data-description="Overall scale and layout." aria-current="step">
+            <div class="spacecraft-explorer__step-copy"><span class="goal-number">01 / OVERVIEW</span><h2>Interplanetary vehicle concept</h2><p>The full model provides a visual reference for the spacecraft discussed in this Mars mission concept.</p></div>
+          </article>
+          <article class="spacecraft-explorer__step" data-spacecraft-step data-focus="crew" data-title="Crew scale reference" data-description="A figure in the source model gives a rough visual scale." >
+            <div class="spacecraft-explorer__step-copy"><span class="goal-number">02 / CREW SCALE</span><h2>People shape the layout</h2><p>The model includes a crew figure. Real mission planning would have to account for habitable volume, life support, and crew access.</p></div>
+          </article>
+          <article class="spacecraft-explorer__step" data-spacecraft-step data-focus="solar" data-title="Solar array" data-description="The highlighted outer structure is a visual hotspot, not a verified model specification." >
+            <div class="spacecraft-explorer__step-copy"><span class="goal-number">03 / SOLAR ARRAY</span><h2>Power for the journey</h2><p>A Mars vehicle concept needs electrical power throughout transit. The highlighted array is an illustrative region of this generic model.</p></div>
+          </article>
+          <article class="spacecraft-explorer__step" data-spacecraft-step data-focus="capsule" data-title="Crew capsule" data-description="The highlighted forward module is an approximate visual reference." >
+            <div class="spacecraft-explorer__step-copy"><span class="goal-number">04 / CAPSULE</span><h2>A place for the crew</h2><p>Habitability depends on usable volume, controls, life support, and safe access. The image shows a NASA Crew Dragon cabin as a real-world reference, not an AURORA interior.</p></div>
+          </article>
         </div>
-        <div class="container">
-            <!--Logo - Get SVGs if you can.  I use fiverr to get png's turned into SVGs. Highly recommend it, worth the $20 - get a light and dark version-->
-            <a class="logo" aria-label="click to go to home page" href="/index.html">
-                <!--Light Colored Logo, remove .dark image tag and the .light class if you don't have a dark and light version -->
-                <img class="light" aria-hidden="true" src="/images/logo-light.png" decoding="async" alt="logo" width="221" height="66">
-
-                <!--Dark Colored Logo-->
-                <img class="dark" aria-hidden="true" src="/images/logo-blue.png" decoding="async" loading="lazy" alt="logo" width="221" height="66">
-            </a>
-
-            <!--Main Nav-->
-            <nav id="navbar-menu">
-                <ul>
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a href="/about.html">About Us</a></li>
-                    <li><a class="active" href="/projects.html">Projects</a></li>
-                    <li><a href="/reviews.html">Reviews</a></li>
-                    <li><a href="/contact.html">Contact</a></li>
-                </ul>
-            </nav>
-
-            <!--Dark Mode toggle-->
-            <button id="dark-mode-toggle">
-                <!--Moon is an inline SVG so you can edit the color if needed-->
-                <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" style="enable-background:new 0 0 480 480" xml:space="preserve"><path d="M459.782 347.328c-4.288-5.28-11.488-7.232-17.824-4.96-17.76 6.368-37.024 9.632-57.312 9.632-97.056 0-176-78.976-176-176 0-58.4 28.832-112.768 77.12-145.472 5.472-3.712 8.096-10.4 6.624-16.832S285.638 2.4 279.078 1.44C271.59.352 264.134 0 256.646 0c-132.352 0-240 107.648-240 240s107.648 240 240 240c84 0 160.416-42.688 204.352-114.176 3.552-5.792 3.04-13.184-1.216-18.496z"/></svg>
-                <img class="sun" aria-hidden="true" src="/images/sun.svg" decoding="async" alt="moon" width="15" height="15">
-            </button>
-
-            <!--Mobile Nav toggle-->
-            <button class="hamburger-menu">
-                <span aria-hidden="true"></span>
-            </button>
-        </div>
-    </div>
-
-    <main id="main">
-
-        <!-- ============================================ -->
-        <!--                    LANDING                   -->
-        <!-- ============================================ -->
-    
-        <section id="int-hero">
-            <h1 id="home-h">Our Projects</h1>
-            <picture>
-                <source media="(max-width: 600px)" srcset="/images/cabinets2-m.jpg">
-                <source media="(min-width: 601px)" srcset="/images/cabinets2.jpg">
-                <img aria-hidden="true" loading="lazy" decoding="async" src="/images/cabinets2.jpg" alt="" width="400" height="662">
-            </picture>
-        </section>
-
-        <!-- ============================================ -->
-        <!--                  Portfolio                   -->
-        <!-- ============================================ -->
-
-        <section id="portfolio">
-            <div class="container">
-                <div class="row">
-                    <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port1-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port1.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port1.jpg" alt="new hallway" width="420" height="567">
-                     </picture>
-                     <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port4-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port4.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port4.jpg" alt="new home construction" width="420" height="630">
-                     </picture>
-                     <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port7-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port7.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port7.jpg" alt="building a new wall" width="420" height="512">
-                     </picture>
-                </div>
-                <div class="row">
-                    <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port2-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port2.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port2.jpg" alt="new kitchen" width="420" height="492">
-                     </picture>
-                     <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port5-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port5.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port5.jpg" alt="apartment addition" width="420" height="517">
-                     </picture>
-                     <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port8-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port8.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port8.jpg" alt="kew kitchen cabinets" width="420" height="629">
-                     </picture>
-                </div>
-                <div class="row">
-                    <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port3-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port3.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port3.jpg" alt="new black window structure" width="420" height="625">
-                     </picture>
-                     
-                     <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port6-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port6.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port6.jpg" alt="kitchen rebovation" width="420" height="452">
-                     </picture>
-                     
-                     
-                     <picture>
-                        <source media="(max-width: 600px)" srcset="/images/portfolio/port9-m.jpg">
-                        <source media="(min-width: 601px)" srcset="/images/portfolio/port9.jpg">
-                        <img loading="lazy" decoding="async" src="/images/portfolio/port9.jpg" alt="bathroom renovation" width="420" height="629">
-                     </picture>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============================================ -->
-        <!--             Final Call to Action             -->
-        <!-- ============================================ -->
-
-        <section id="cta">
-            <div class="container">
-                <h2 class="title">Get It Done <br> With Us Today</h2>
-                <p>
-                    Say something catchy, informative, and encouraging to click the button to go to the contact page.  I like to add these to the bottom of all pages.
-                </p>
-                <a href="/contact.html" class="button-solid">Free Estimate</a>
-            </div>
-            <picture>
-                <source media="(max-width: 600px)" srcset="/images/cabinets2-m.webp">
-                <source media="(min-width: 601px)" srcset="/images/cabinets2.jpg">
-                <img aria-hidden="true" loading="lazy" decoding="async" src="/images/cabinets2.jpg" alt="kitchen cabinets" width="1920" height="1280">
-             </picture>
-        </section>
-
-    </main>
-
-    <!-- ============================================ -->
-    <!--                   Footer                     -->
-    <!-- ============================================ -->
-
-    <footer id="footer">
-        <div class="container">
-            <div class="left-section">
-                <a class="logo" href="/index.html"><img loading="lazy" decoding="async" src="/images/logo-light.png" alt="logo" width="264" height="78"></a>
-                <p>
-                    Extra content if you need it, if not you can delete this whole p tag. I usually do.
-                </p>
-            </div>
-            <div class="right-section">
-                <div class="lists">
-                    <ul>
-                        <li><h2>Information</h2></li>
-                        <li><a href="/index.html">Home</a></li>
-                        <li><a href="/about.html">About Us</a></li>
-                        <li><a href="/projects.html">Projects</a></li>
-                        <li><a href="/testimonials.html">Reviews</a></li>
-                        <li><a href="/contact.html">Contact</a></li>
-                    </ul>
-                    <ul>
-                        <li><h2>Services</h2></li>
-                        <li>Service1</li>
-                        <li>Service2</li>
-                        <li>Service4</li>
-                        <li>Service5</li>
-                    </ul>
-                    <ul>
-                        <li><h2>Contact</h2></li>
-                        <li><a href="/contact.html">First Address Line<br>Denver CO 80206</a></li>
-                        <li><a href="tel:555-779-4407">T: (555) 779-4407</a></li>
-                        <li><a href="mailto:email@email.com">Click to Email</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="credit">
-            <span>Designed and Hand Coded by</span>
-            <a href="" target="_blank" rel="noopener">Your Company Name</a>
-            <span class="copyright"> Copyright 2021 - Present</span></div>
-    </footer>
-
-    <script defer src="/nav.js"></script>
-    <script defer src="/dark.js"></script>
-    <!--
-        This script adds a class to the body after scrolling 100px
-        and we used these body.scroll styles to create some on scroll 
-        animations with the navbar
-    -->
-    <script defer>
-        document.addEventListener('scroll', (e) => { 
-            const scroll = document.documentElement.scrollTop;
-            if(scroll >= 100){
-        document.querySelector('body').classList.add('scroll')
-            } else {
-            document.querySelector('body').classList.remove('scroll')
-            }
-        });
-    </script>
-
+      </div>
+    </section>
+  </main>
+  <footer class="site-foot"><div class="page-width"><div class="footer-main"><div><a class="logo" href="/index.html"><span class="logo-mark" aria-hidden="true">A</span><span><span class="logo-name">AURORA</span><span class="logo-caption">Mars mission concept</span></span></a><p>An educational concept for a crewed mission to Mars.</p></div><nav class="footer-links" aria-label="Footer navigation"><a href="/about.html">Mission</a><a href="/projects.html">Spacecraft</a><a href="/reviews.html">Crew</a><a href="/contact.html">Research</a></nav></div><div class="footer-bottom"><span>Fictional educational project; not an active spaceflight program.</span><a href="#main">Back to top &#8593;</a></div></div></footer>
+  <script type="module" src="/spacecraft-viewer.js?v=2"></script>
+  <script defer src="/nav.js"></script>
 </body>
 </html>

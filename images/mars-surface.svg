@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" role="img" aria-labelledby="title">
+  <title id="title">Concept illustration of a rover on the Martian surface</title>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1">
+      <stop stop-color="#a9523f"/>
+      <stop offset="1" stop-color="#e2a06c"/>
+    </linearGradient>
+    <linearGradient id="soil" x2="0" y2="1">
+      <stop stop-color="#a65a3c"/>
+      <stop offset="1" stop-color="#513331"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="640" fill="url(#sky)"/>
+  <circle cx="756" cy="138" r="36" fill="#f1c28a" opacity=".88"/>
+  <path d="M0 390 104 323l95 35 130-105 124 91 114-78 107 52 132-99 154 101v320H0z" fill="#985342"/>
+  <path d="M0 465q130-54 264-17t240-8 228 15 228-30v215H0z" fill="url(#soil)"/>
+  <g fill="#47302c" opacity=".7">
+    <ellipse cx="92" cy="521" rx="49" ry="12"/>
+    <ellipse cx="845" cy="500" rx="72" ry="16"/>
+    <ellipse cx="654" cy="589" rx="39" ry="10"/>
+  </g>
+  <g stroke="#2b3030" stroke-linecap="round" stroke-linejoin="round" stroke-width="9">
+    <path d="M398 434h171l-19 70H414z" fill="#c8a278"/>
+    <path d="m424 436 18-33h93l26 33" fill="#d7b88d"/>
+    <path d="M439 401v-57h20l14 30h54v27" fill="none"/>
+    <path d="M473 373h61" fill="none"/>
+    <path d="m398 466-47 34m219-37 42 36" fill="none"/>
+    <circle cx="430" cy="510" r="20" fill="#383534"/>
+    <circle cx="536" cy="510" r="20" fill="#383534"/>
+    <circle cx="430" cy="510" r="7" fill="#c8a278" stroke="none"/>
+    <circle cx="536" cy="510" r="7" fill="#c8a278" stroke="none"/>
+  </g>
+  <path d="M0 463q175-25 349 7t287-7 324 4" fill="none" stroke="#d99a68" stroke-opacity=".55" stroke-width="4"/>
+</svg>

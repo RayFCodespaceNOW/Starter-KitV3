@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "AURORA Mars Mission Concept",
+    "short_name": "AURORA",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
+    "theme_color": "#f2e2dc",
+    "background_color": "#f2e2dc",
     "display": "standalone"
 }

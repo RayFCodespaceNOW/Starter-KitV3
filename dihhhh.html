@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRANSIT — Mars Mission</title>
+<style>
+  :root{
+    --bg:#110d0d; --panel:#191313; --peach:#efb09a; --orange:#df7255;
+    --cream:#f4eee9; --muted:#b9aaa3; --line:#382927;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--cream);
+    font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center}
+  #wrap{
+    width:min(1180px,100vw);height:min(720px,100vh);position:relative;
+    background:#110d0d;border:1px solid #382927;overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  canvas{width:100%;height:100%;display:block;cursor:crosshair}
+  .hud{position:absolute;inset:0;pointer-events:none}
+  .top{position:absolute;left:48px;top:40px}
+  .kicker{font-size:11px;letter-spacing:.18em;color:var(--peach);font-weight:700;text-transform:uppercase}
+  h1{font-family:Georgia,serif;font-weight:400;font-size:38px;line-height:1.05;
+     margin:10px 0 0;max-width:380px;color:var(--cream)}
+  .mission{position:absolute;right:48px;top:44px;text-align:right}
+  .mission .label{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+  #score{font-family:Georgia,serif;font-size:26px;margin-top:6px;color:var(--cream)}
+  .bottom{position:absolute;left:48px;bottom:36px}
+  .controls{font-size:12px;color:var(--muted);letter-spacing:.05em}
+  .controls b{color:var(--cream);font-weight:600}
+  .status{position:absolute;right:48px;bottom:36px;text-align:right}
+  #status{color:var(--peach);font-size:11px;letter-spacing:.15em;font-weight:700;text-transform:uppercase}
+  #hint{color:var(--muted);font-size:11px;margin-top:5px;letter-spacing:.05em}
+  #start{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    border:1px solid var(--peach);background:#191313;color:var(--cream);
+    padding:16px 28px;letter-spacing:.15em;font-weight:700;font-size:11px;
+    cursor:pointer;pointer-events:auto;transition:all 0.2s ease;
+    text-transform:uppercase;
+  }
+  #start:hover{background:#251715;border-color:var(--orange)}
+  #flash{position:absolute;inset:0;background:var(--peach);opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="wrap">
+<canvas id="game" width="1180" height="720"></canvas>
+<div class="hud">
+  <div class="top">
+    <div class="kicker">GAME</div>
+    <h1>Cross space.</h1>
+  </div>
+  <div class="mission">
+    <div class="label">MISSION DISTANCE</div>
+    <div id="score">000000 km</div>
+  </div>
+  <div class="bottom">
+    <div class="controls"><b>W / S or ↑ / ↓</b> steer &nbsp;&nbsp; <b>SPACE</b> booster</div>
+  </div>
+  <div class="status">
+    <div id="status">SYSTEMS ALL OK!</div>
+    <div id="hint">Endless space travel!</div>
+  </div>
+  <button id="start">BEGIN TRANSIT</button>
+  <div id="flash"></div>
+</div>
+</div>
+<script>
+const c=document.getElementById('game'),ctx=c.getContext('2d');
+const W=c.width,H=c.height;
+const keys={};
+let running=false, over=false, t=0, dist=0, baseSpeed=4.0, spawn=0;
+let ship={x:180,y:360,vy:0,tilt:0};
+let obstacles=[], stars=[];
+
+for(let i=0;i<160;i++) stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,s:Math.random()*1.4+.2});
+
+function reset(){
+  running=true;over=false;t=0;dist=0;baseSpeed=4.0;spawn=0;obstacles=[];
+  ship={x:180,y:360,vy:0,tilt:0};
+  document.getElementById('start').style.display='none';
+  document.getElementById('status').textContent='SYSTEMS NOMINAL';
+  document.getElementById('hint').textContent='Infinite deep space transit in progress.';
+}
+
+function drawBg(){
+  ctx.fillStyle='#110d0d';ctx.fillRect(0,0,W,H);
+  let g=ctx.createRadialGradient(820,360,30,820,360,600);
+  g.addColorStop(0,'rgba(223,114,85,.08)');g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  
+  for(const s of stars){
+    let x=(s.x - (t*s.s*1.4))%W;if(x<0)x+=W;
+    ctx.globalAlpha=.2+s.r*.3;ctx.fillStyle='#f4eee9';
+    ctx.fillRect(x,s.y,s.r,s.r);
+  }
+  ctx.globalAlpha=1;
+}
+
+function drawShip(){
+  ctx.save();ctx.translate(ship.x,ship.y);ctx.rotate(ship.tilt);
+  // Refined editorial engine exhaust glow
+  let eg=ctx.createLinearGradient(-60,0,-5,0);
+  eg.addColorStop(0,'rgba(239,176,154,0)');eg.addColorStop(.6,'rgba(223,114,85,.3)');eg.addColorStop(1,'rgba(244,238,233,.85)');
+  ctx.fillStyle=eg;ctx.beginPath();ctx.moveTo(-58,0);ctx.lineTo(-10,-8);ctx.lineTo(-10,8);ctx.closePath();ctx.fill();
+  
+  // Sleek minimalist spacecraft geometry
+  ctx.fillStyle='#f4eee9';ctx.strokeStyle='#7d5a50';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(32,0);ctx.lineTo(-14,-18);ctx.lineTo(-42,-11);ctx.lineTo(-24,0);ctx.lineTo(-42,11);ctx.lineTo(-14,18);ctx.closePath();ctx.fill();ctx.stroke();
+  
+  ctx.fillStyle='#df7255';ctx.beginPath();ctx.moveTo(32,0);ctx.lineTo(8,-6);ctx.lineTo(8,6);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#110d0d';ctx.beginPath();ctx.ellipse(2,0,10,6,0,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+
+function drawObstacle(o){
+  ctx.save();ctx.translate(o.x,o.y);ctx.rotate(o.rot);
+  if(o.type==='debris'){
+    // Jagged metal debris cluster
+    ctx.fillStyle='#b9aaa3';ctx.strokeStyle='#f4eee9';ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let i=0;i<5;i++){let a=i*Math.PI*2/5,rr=o.r*(0.7+Math.sin(i*4)*0.3);
+      let px=Math.cos(a)*rr,py=Math.sin(a)*rr;
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+    ctx.closePath();ctx.fill();ctx.stroke();
+  } else if(o.type==='satellite'){
+    // Drifting old satellite / probe
+    ctx.fillStyle='#382927';ctx.strokeStyle='#efb09a';ctx.lineWidth=1.2;
+    ctx.fillRect(-o.r*0.6,-o.r*0.4,o.r*1.2,o.r*0.8);
+    ctx.strokeRect(-o.r*0.6,-o.r*0.4,o.r*1.2,o.r*0.8);
+    ctx.fillStyle='#df7255';
+    ctx.fillRect(-o.r*1.1,-o.r*0.2,o.r*0.5,o.r*0.4);
+    ctx.fillRect(o.r*0.6,-o.r*0.2,o.r*0.5,o.r*0.4);
+  } else {
+    // Elegant asteroid rock
+    ctx.fillStyle='#2a1f1d';ctx.strokeStyle='#8d655b';ctx.lineWidth=1;
+    ctx.beginPath();
+    for(let i=0;i<8;i++){let a=i*Math.PI*2/8,rr=o.r*(.75+Math.sin(i*4.2)*.2);
+      let px=Math.cos(a)*rr,py=Math.sin(a)*rr;
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+    ctx.closePath();ctx.fill();ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function collide(a,o){
+  let hitRadius = o.r + 20;
+  return Math.hypot(a.x-o.x,a.y-o.y)<hitRadius;
+}
+
+function endGame(){
+  running=false;over=true;
+  document.getElementById('status').textContent='TRANSIT INTERRUPTED';
+  document.getElementById('hint').textContent='Press ENTER or click to restart journey.';
+  document.getElementById('start').style.display='block';
+  document.getElementById('start').textContent='RESTART TRANSIT';
+  document.getElementById('flash').animate([{opacity:.28},{opacity:0}],{duration:450});
+}
+
+function frame(){
+  t+=1;
+  drawBg();
+  if(running){
+    // Infinite game progression: speed increases steadily over distance
+    let currentSpeed = baseSpeed + (dist / 14000);
+    let boost = keys[' '] ? 1.75 : 1.0;
+    let effectiveSpeed = currentSpeed * boost;
+
+    // Smooth responsive steering (W/S or Up/Down arrows)
+    let moveUp = keys['ArrowUp'] || keys['w'] || keys['W'];
+    let moveDown = keys['ArrowDown'] || keys['s'] || keys['S'];
+    
+    ship.vy += (moveUp ? -0.55 : 0) + (moveDown ? 0.55 : 0);
+    ship.vy *= 0.85; // smooth damping
+    ship.y += ship.vy;
+    ship.y = Math.max(90, Math.min(630, ship.y));
+    ship.tilt = ship.vy * 0.035;
+    
+    dist += effectiveSpeed * 9;
+    spawn -= 1;
+    
+    if(spawn <= 0){
+      // Progressive spawning intervals & new obstacle types as distance grows
+      spawn = Math.max(18, (48 - Math.floor(dist / 16000) * 4)) + Math.random()*28;
+      
+      let type = 'rock';
+      let r = 12 + Math.random()*26;
+      let vxMult = 1.0;
+      
+      if(dist > 20000 && Math.random() < 0.35){
+        type = 'debris';
+        vxMult = 1.4;
+        r = 14 + Math.random()*15;
+      } else if(dist > 45000 && Math.random() < 0.4){
+        type = 'satellite';
+        r = 20 + Math.random()*12;
+      }
+      
+      obstacles.push({
+        x: W + 70,
+        y: 80 + Math.random() * 560,
+        r: r,
+        rot: Math.random() * 6,
+        type: type,
+        vxMult: vxMult
+      });
+    }
+
+    for(const s of stars){s.x-=effectiveSpeed*.5*s.s}
+    for(const o of obstacles){
+      o.x -= effectiveSpeed * o.vxMult;
+      o.rot += .012;
+    }
+    obstacles = obstacles.filter(o => o.x > -90);
+    
+    for(const o of obstacles){
+      if(collide(ship,o)){
+        endGame();
+        break;
+      }
+    }
+    
+    document.getElementById('score').textContent = Math.floor(dist).toString().padStart(6,'0') + ' km';
+  }
+  
+  obstacles.forEach(drawObstacle);
+  drawShip();
+  requestAnimationFrame(frame);
+}
+
+// Event listeners for keyboard & mouse/touch interactivity
+document.getElementById('start').onclick = reset;
+addEventListener('keydown', e => {
+  keys[e.key] = true;
+  if(e.key === 'Enter' && !running) reset();
+});
+addEventListener('keyup', e => keys[e.key] = false);
+
+// Mouse / touch smooth tracking fallback
+c.addEventListener('mousemove', e => {
+  if(!running) return;
+  const rect = c.getBoundingClientRect();
+  const mouseY = (e.clientY - rect.top) * (H / rect.height);
+  ship.y += (mouseY - ship.y) * 0.12;
+  ship.y = Math.max(90, Math.min(630, ship.y));
+});
+
+frame();
+</script>
+</body>
+</html>
